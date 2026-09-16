@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hệ thống — Diamond Focus Media</title>
+  <meta name="description" content="Diamond Focus Media — màn LED trong tòa nhà, hầm xe và lối vào. Ấn tượng · Độc tôn · Halo Effect." />
+  <link rel="icon" href="images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+  <header class="solid" id="site-header">
+    <div class="wrap bar">
+      <a href="index.html" aria-label="Diamond Focus"><img class="logo" src="images/logo.png" alt="Diamond Focus" /></a>
+      <nav class="desk" aria-label="Chính">
+          <a class="" href="index.html">Trang chủ</a>
+          <a class="active" href="he-thong.html">Hệ thống</a>
+          <a class="" href="ve-chung-toi.html">Về chúng tôi</a>
+          <a class="" href="tin-tuc.html">Tin tức</a>
+          <a class="" href="lien-he.html">Liên hệ</a>
+      </nav>
+      <a class="cta" href="lien-he.html">Đặt lịch tư vấn</a>
+      <button class="menu-btn" type="button" aria-label="Menu" onclick="document.getElementById('mobile').classList.toggle('open')">☰</button>
+    </div>
+    <div class="mobile" id="mobile"><a class="" href="index.html">Trang chủ</a><a class="active" href="he-thong.html">Hệ thống</a><a class="" href="ve-chung-toi.html">Về chúng tôi</a><a class="" href="tin-tuc.html">Tin tức</a><a class="" href="lien-he.html">Liên hệ</a></div>
+  </header>
+  
+  <main class="page">
+    <section class="wrap" style="padding-bottom:1rem">
+      <p class="kicker light">Hệ thống của chúng tôi</p>
+    </section>
+    <section class="wrap" style="padding-bottom:5rem">
+      <div class="grid2">
+        <article class="card" id="billboard-base">
+          <img src="images/hero-poster.jpg" alt="Billboard Base" />
+          <div class="body">
+            <p class="tag">Hệ thống 01</p>
+            <h3>Billboard Base</h3>
+            <p class="tl">LED billboard hầm xe và lối vào.</p>
+            <p class="txt">Màn LED khổ lớn tại ram dốc, barie và cổng hầm. Đây là lúc tài xế chậm lại — vài giây đủ để một hình ảnh in vào ký ức. Billboard Base là xương sống Halo Effect của Diamond Focus: một khung hình, đúng tầm mắt, độc tôn trong không gian tối.</p>
+            <p class="focus">Hầm xe · Lối vào · Barie</p>
+          </div>
+        </article>
+        <article class="card" id="light-base">
+          <img src="images/tis-school.jpg" alt="LightBase" />
+          <div class="body">
+            <p class="tag">Hệ thống 02</p>
+            <h3>LightBase</h3>
+            <p class="tl">LED indoor — sảnh, hành lang, thang máy.</p>
+            <p class="txt">Mạng lưới ánh sáng trong lòng tòa nhà: sảnh, hành lang, khu chờ thang. LightBase không phải biển ngoài trời đưa vào trong — là tấm LED đủ sáng để đọc, đủ tinh để thành một phần kiến trúc.</p>
+            <p class="focus">Sảnh · Hành lang · Thang máy</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <div>
+        <img class="logo" src="images/logo.png" alt="" />
+        <p class="lead" style="color:var(--muted)">Ấn tượng - Độc tôn - Halo Effect<br />Tận tâm — tận lực với khách hàng</p>
+      </div>
+      <div>
+        <p class="kicker light">Menu</p>
+        <a href="index.html">Trang chủ</a><a href="he-thong.html">Hệ thống</a><a href="ve-chung-toi.html">Về chúng tôi</a><a href="tin-tuc.html">Tin tức</a><a href="lien-he.html">Liên hệ</a>
+      </div>
+      <div>
+        <p class="kicker light">Liên hệ</p>
+        <p style="margin-top:.8rem;color:var(--muted);font-size:.9rem">Toà nhà St. Moritz — 1014 Phạm Văn Đồng, Phường Hiệp Bình, TP. HCM</p>
+        <p style="margin-top:.5rem"><a href="tel:0347797123">034 7797 123</a></p>
+        <p><a href="mailto:info@diamondfocus.vn">info@diamondfocus.vn</a></p>
+      </div>
+    </div>
+    <div class="wrap tiny">© 2026 Diamond Focus Media. St. Moritz, Hiệp Bình · TP. Hồ Chí Minh</div>
+  </footer>
+  <script>
+    const h = document.getElementById('site-header');
+    const onHero = false;
+    const sync = () => {
+      if (!onHero) return;
+      h.classList.toggle('solid', window.scrollY > 16);
+    };
+    sync();
+    window.addEventListener('scroll', sync, {passive:true});
+  </script>
+</body>
+</html>
