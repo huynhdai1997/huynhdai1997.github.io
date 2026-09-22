@@ -1,15 +1,15 @@
 :root {
-  --bg: #0a0a0a;
-  --elevated: #141414;
-  --paper: #f4f6f8;
-  --paper-muted: #e6eaee;
-  --fg: #f4f6f8;
-  --ink: #111111;
-  --muted: #8a8f96;
-  --subtle: #6b7077;
-  --accent: #67bde5;
-  --line: #262626;
-  --paper-line: #d5dbe1;
+  --bg: #ffffff;
+  --elevated: #f0f6fc;
+  --paper: #eaf3fb;
+  --paper-muted: #dcecf8;
+  --fg: #0b2a4a;
+  --ink: #0b2a4a;
+  --muted: #4a6785;
+  --subtle: #5b7a98;
+  --accent: #1a7fd4;
+  --line: #c8dcea;
+  --paper-line: #c5d8ec;
   --font: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
   --display: "Playfair Display", "Times New Roman", serif;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -43,10 +43,20 @@ header {
   transition: background .2s var(--ease), box-shadow .2s var(--ease);
 }
 header.solid {
-  background: rgba(10,10,10,.92);
+  background: rgba(255,255,255,.92);
   box-shadow: 0 1px 0 0 var(--line);
   backdrop-filter: blur(12px);
 }
+header:not(.solid) nav.desk a,
+header:not(.solid) .cta,
+header:not(.solid) .menu-btn { color: rgba(255,255,255,.88); }
+header:not(.solid) nav.desk a:hover,
+header:not(.solid) nav.desk a.active { color: #fff; }
+.logo-dark { display: none; }
+header.solid .logo-light, footer .logo-light { display: none; }
+header.solid .logo-dark, footer .logo-dark { display: block; }
+header:not(.solid) .logo-light { display: block; }
+header:not(.solid) .logo-dark { display: none; }
 .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 4rem; }
 @media (min-width: 768px) { .bar { height: 5rem; } }
 .logo { height: 2.25rem; width: auto; }
@@ -56,11 +66,12 @@ nav.desk { display: none; align-items: center; gap: 1.75rem; }
 nav.desk a { font-size: .875rem; color: var(--muted); min-height: 2.75rem; display: inline-flex; align-items: center; }
 nav.desk a:hover, nav.desk a.active { color: var(--fg); }
 .cta {
-  display: none; min-height: 2.75rem; padding: 0 1rem; border: 1px solid var(--line);
+  display: none; min-height: 2.75rem; padding: 0 1rem; border: 1px solid var(--accent);
   border-radius: .5rem; font-size: .875rem; align-items: center; gap: .4rem;
+  background: var(--accent); color: #fff;
 }
 @media (min-width: 860px) { .cta { display: inline-flex; } }
-.cta:hover { border-color: var(--accent); color: var(--accent); }
+.cta:hover { filter: brightness(1.08); color: #fff; }
 .menu-btn {
   width: 2.75rem; height: 2.75rem; border: 0; background: transparent; color: var(--fg);
   display: grid; place-items: center; font-size: 1.4rem;
@@ -79,7 +90,7 @@ nav.desk a:hover, nav.desk a.active { color: var(--fg); }
 }
 .hero::after {
   content: ""; position: absolute; inset: auto 0 0; height: 8rem;
-  background: linear-gradient(to top, #0a0a0a, transparent);
+  background: linear-gradient(to top, #ffffff, transparent);
 }
 .hero-inner { position: relative; min-height: 100dvh; display: flex; flex-direction: column; }
 .sys-label {
@@ -117,7 +128,7 @@ nav.desk a:hover, nav.desk a.active { color: var(--fg); }
   display: inline-flex; align-items: center; gap: .4rem; min-height: 2.75rem; margin-top: 2rem;
   padding: 0 1.1rem; border-radius: .5rem; font-size: .875rem;
 }
-.btn-ink { background: var(--ink); color: var(--fg); }
+.btn-ink { background: var(--accent); color: #fff; }
 .btn-outline { border: 1px solid var(--line); }
 .btn-outline-ink { border: 1px solid var(--paper-line); }
 

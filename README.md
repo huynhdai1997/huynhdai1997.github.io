@@ -1,5 +1,7 @@
 # Diamond Focus Media
 
-Bản xem website công khai, không cần đăng nhập.
+Bản xem website giới thiệu — teammate mở link, không cần đăng nhập.
 
-Mở: https://huynhdai1997.github.io/
+## GitHub Pages
+Sau khi repo public: Settings → Pages → Branch `main` / folder `/ (root)`.
+Link: https://huynhdai1997.github.io/diamond-focus-media/
