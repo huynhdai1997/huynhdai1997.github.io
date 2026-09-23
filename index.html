@@ -84,31 +84,29 @@
       </div>
     </div>
   </section>
-  <section class="paper section">
-    <div class="wrap">
-      <div class="head-row">
-        <div>
-          <p class="kicker">Đã triển khai</p>
-          <h2 style="margin-top:.75rem;font-size:clamp(1.8rem,4vw,2.6rem)">Chiến dịch trên mạng lưới LED.</h2>
-        </div>
-        <a class="btn btn-outline-ink" href="he-thong.html">Xem hệ thống →</a>
-      </div>
-      <div class="works">
-        <article class="work">
-          <img src="images/kumho-artemis.jpg" alt="Kumho Tire" />
-          <h3>Kumho Tire</h3>
-          <p>Hai dải LED ôm tường kính hầm xe.</p>
+  <section class="section" id="da-trien-khai" style="padding-left:0;padding-right:0;overflow:hidden">
+    <div class="wrap works-head">
+      <p class="kicker">Đã triển khai</p>
+      <h2 style="margin-top:.75rem;font-size:clamp(1.8rem,4vw,2.6rem)">Chiến dịch trên mạng lưới LED.</h2>
+    </div>
+    <div class="carousel" id="works-carousel" style="margin-top:2.5rem">
+      <div class="carousel-track" id="works-track">
+        <button class="peek left" type="button" data-dir="-1" aria-label="Chiến dịch trước"><img alt="" /></button>
+        <article class="slide">
+          <a id="works-link" href="tin-kumho.html">
+            <img id="works-img" alt="" />
+            <div class="veil"></div>
+            <div class="cap">
+              <p class="cat" id="works-cat"></p>
+              <h3 id="works-title"></h3>
+            </div>
+          </a>
+          <div class="carousel-nav">
+            <button type="button" data-dir="-1" aria-label="Chiến dịch trước">←</button>
+            <button type="button" data-dir="1" aria-label="Chiến dịch sau">→</button>
+          </div>
         </article>
-        <article class="work">
-          <img src="images/hyundai-creta.jpg" alt="Hyundai Creta" />
-          <h3>New CRETA</h3>
-          <p>Tâm điểm cuộc chơi — trước thanh barie.</p>
-        </article>
-        <article class="work wide">
-          <img src="images/tis-school.jpg" alt="TIS" />
-          <h3>TIS International School</h3>
-          <p>Thông điệp giáo dục hiện ra giữa nhịp sống căn hộ.</p>
-        </article>
+        <button class="peek right" type="button" data-dir="1" aria-label="Chiến dịch sau"><img alt="" /></button>
       </div>
     </div>
   </section>
@@ -190,6 +188,57 @@
     };
     sync();
     window.addEventListener('scroll', sync, {passive:true});
+
+    const works = [
+      { img: "images/kumho-artemis.jpg", title: "Kumho Tire", cat: "Hầm xe", href: "tin-kumho.html" },
+      { img: "images/hyundai-creta.jpg", title: "Hyundai Creta", cat: "Chiến dịch", href: "tin-creta.html" },
+      { img: "images/tis-school.jpg", title: "TIS International School", cat: "LED indoor", href: "tin-tis.html" },
+    ];
+    let wi = 0;
+    const n = works.length;
+    const track = document.getElementById("works-track");
+    function paint() {
+      const cur = works[wi], prev = works[(wi - 1 + n) % n], next = works[(wi + 1) % n];
+      const left = track.querySelector(".peek.left img");
+      const right = track.querySelector(".peek.right img");
+      left.src = prev.img; left.alt = prev.title;
+      right.src = next.img; right.alt = next.title;
+      document.getElementById("works-img").src = cur.img;
+      document.getElementById("works-img").alt = cur.title;
+      document.getElementById("works-title").textContent = cur.title;
+      document.getElementById("works-cat").textContent = cur.cat;
+      document.getElementById("works-link").href = cur.href;
+    }
+    paint();
+    document.querySelectorAll("#works-carousel [data-dir]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        wi = (wi + Number(btn.getAttribute("data-dir")) + n) % n;
+        paint();
+      });
+    });
+    let sx = 0, dx = 0, down = false;
+    track.addEventListener("pointerdown", (e) => {
+      if (e.target.closest("a,button")) return;
+      down = true; sx = e.clientX; dx = 0;
+      track.classList.add("grabbing");
+      track.setPointerCapture(e.pointerId);
+    });
+    track.addEventListener("pointermove", (e) => {
+      if (!down) return;
+      dx = e.clientX - sx;
+      track.style.transform = "translateX(" + dx * 0.4 + "px)";
+    });
+    function endDrag() {
+      if (!down) return;
+      down = false;
+      track.classList.remove("grabbing");
+      track.style.transform = "";
+      if (dx < -48) { wi = (wi + 1) % n; paint(); }
+      else if (dx > 48) { wi = (wi - 1 + n) % n; paint(); }
+      dx = 0;
+    }
+    track.addEventListener("pointerup", endDrag);
+    track.addEventListener("pointercancel", endDrag);
   </script>
 </body>
 </html>
