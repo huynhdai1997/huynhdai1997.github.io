@@ -89,24 +89,11 @@
       <p class="kicker">Đã triển khai</p>
       <h2 style="margin-top:.75rem;font-size:clamp(1.8rem,4vw,2.6rem)">Chiến dịch trên mạng lưới LED.</h2>
     </div>
-    <div class="carousel" id="works-carousel" style="margin-top:2.5rem">
-      <div class="carousel-track" id="works-track">
-        <button class="peek left" type="button" data-dir="-1" aria-label="Chiến dịch trước"><img alt="" /></button>
-        <article class="slide">
-          <a id="works-link" href="tin-kumho.html">
-            <img id="works-img" alt="" />
-            <div class="veil"></div>
-            <div class="cap">
-              <p class="cat" id="works-cat"></p>
-              <h3 id="works-title"></h3>
-            </div>
-          </a>
-          <div class="carousel-nav">
-            <button type="button" data-dir="-1" aria-label="Chiến dịch trước">←</button>
-            <button type="button" data-dir="1" aria-label="Chiến dịch sau">→</button>
-          </div>
-        </article>
-        <button class="peek right" type="button" data-dir="1" aria-label="Chiến dịch sau"><img alt="" /></button>
+    <div class="carousel" id="works-carousel" style="margin-top:2.5rem;position:relative">
+      <div class="carousel-strip" id="works-track"></div>
+      <div class="carousel-nav">
+        <button type="button" data-dir="-1" aria-label="Chiến dịch trước">←</button>
+        <button type="button" data-dir="1" aria-label="Chiến dịch sau">→</button>
       </div>
     </div>
   </section>
@@ -194,51 +181,85 @@
       { img: "images/hyundai-creta.jpg", title: "Hyundai Creta", cat: "Chiến dịch", href: "tin-creta.html" },
       { img: "images/tis-school.jpg", title: "TIS International School", cat: "LED indoor", href: "tin-tis.html" },
     ];
-    let wi = 0;
     const n = works.length;
+    const base = works.concat(works, works);
     const track = document.getElementById("works-track");
-    function paint() {
-      const cur = works[wi], prev = works[(wi - 1 + n) % n], next = works[(wi + 1) % n];
-      const left = track.querySelector(".peek.left img");
-      const right = track.querySelector(".peek.right img");
-      left.src = prev.img; left.alt = prev.title;
-      right.src = next.img; right.alt = next.title;
-      document.getElementById("works-img").src = cur.img;
-      document.getElementById("works-img").alt = cur.title;
-      document.getElementById("works-title").textContent = cur.title;
-      document.getElementById("works-cat").textContent = cur.cat;
-      document.getElementById("works-link").href = cur.href;
+    const viewport = document.getElementById("works-carousel");
+    const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+    let pIndex = n;
+    let drag = 0;
+    let anim = true;
+    base.forEach((w) => {
+      const el = document.createElement("article");
+      el.className = "card-slide";
+      el.innerHTML = `<a href="${w.href}"><img src="${w.img}" alt="${w.title}" /><div class="veil"></div><div class="cap"><p class="cat">${w.cat}</p><h3>${w.title}</h3></div></a>`;
+      track.appendChild(el);
+    });
+    const cards = [...track.children];
+    function metrics() {
+      const vw = viewport.clientWidth;
+      const slideW = Math.min(vw * 0.62, 720);
+      const gap = 20;
+      const pad = (vw - slideW) / 2;
+      return { vw, slideW, gap, pad, step: slideW + gap };
     }
-    paint();
-    document.querySelectorAll("#works-carousel [data-dir]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        wi = (wi + Number(btn.getAttribute("data-dir")) + n) % n;
-        paint();
+    function paint(withAnim) {
+      const { vw, slideW, pad, step } = metrics();
+      const tx = pad - pIndex * step + drag;
+      track.style.transition = withAnim ? "transform 720ms " + EASE : "none";
+      track.style.transform = "translate3d(" + tx + "px,0,0)";
+      cards.forEach((card, i) => {
+        card.style.width = slideW + "px";
+        const center = tx + i * step + slideW / 2;
+        const abs = Math.min(Math.abs((center - vw / 2) / step), 1);
+        card.style.transform = "scale(" + (1 - abs * 0.12) + ")";
+        card.style.transition = withAnim ? "transform 720ms " + EASE : "none";
+        card.classList.toggle("is-active", abs < 0.35);
       });
+    }
+    paint(false);
+    window.addEventListener("resize", () => paint(false));
+    function go(dir) {
+      anim = true;
+      pIndex += dir;
+      drag = 0;
+      paint(true);
+    }
+    track.addEventListener("transitionend", (e) => {
+      if (e.target !== track) return;
+      if (pIndex < n) { pIndex += n; paint(false); }
+      else if (pIndex >= n * 2) { pIndex -= n; paint(false); }
     });
-    let sx = 0, dx = 0, down = false;
-    track.addEventListener("pointerdown", (e) => {
+    document.querySelectorAll("#works-carousel [data-dir]").forEach((btn) => {
+      btn.addEventListener("click", () => go(Number(btn.getAttribute("data-dir"))));
+    });
+    let sx = 0, down = false, lastX = 0, lastT = 0, vel = 0;
+    viewport.addEventListener("pointerdown", (e) => {
       if (e.target.closest("a,button")) return;
-      down = true; sx = e.clientX; dx = 0;
-      track.classList.add("grabbing");
-      track.setPointerCapture(e.pointerId);
+      down = true; sx = lastX = e.clientX; lastT = performance.now(); vel = 0;
+      viewport.setPointerCapture(e.pointerId);
     });
-    track.addEventListener("pointermove", (e) => {
+    viewport.addEventListener("pointermove", (e) => {
       if (!down) return;
-      dx = e.clientX - sx;
-      track.style.transform = "translateX(" + dx * 0.4 + "px)";
+      const now = performance.now();
+      vel = (e.clientX - lastX) / Math.max(now - lastT, 8);
+      lastX = e.clientX; lastT = now;
+      drag = e.clientX - sx;
+      paint(false);
     });
     function endDrag() {
       if (!down) return;
       down = false;
-      track.classList.remove("grabbing");
-      track.style.transform = "";
-      if (dx < -48) { wi = (wi + 1) % n; paint(); }
-      else if (dx > 48) { wi = (wi - 1 + n) % n; paint(); }
-      dx = 0;
+      const { slideW } = metrics();
+      const flick = vel * 280;
+      const th = Math.min(120, slideW * 0.18);
+      if (drag + flick < -th) go(1);
+      else if (drag + flick > th) go(-1);
+      else { drag = 0; paint(true); }
+      drag = 0;
     }
-    track.addEventListener("pointerup", endDrag);
-    track.addEventListener("pointercancel", endDrag);
+    viewport.addEventListener("pointerup", endDrag);
+    viewport.addEventListener("pointercancel", endDrag);
   </script>
 </body>
 </html>

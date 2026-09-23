@@ -149,39 +149,31 @@ nav.desk a:hover, nav.desk a.active { color: var(--fg); }
 @media (min-width: 768px) { .head-row { flex-direction: row; align-items: flex-end; justify-content: space-between; } }
 
 .works-head { text-align: center; }
-.carousel { overflow: hidden; }
-.carousel-track {
-  display: flex; align-items: center; justify-content: center; gap: .75rem;
-  cursor: grab;
+.carousel { overflow: hidden; cursor: grab; }
+.carousel:active { cursor: grabbing; }
+.carousel-strip {
+  display: flex; align-items: center; gap: 1.25rem;
+  will-change: transform;
 }
-.carousel-track.grabbing { cursor: grabbing; }
-.peek {
-  display: none; width: 18vw; min-width: 7rem; height: min(22rem, 38vw);
-  border-radius: 1rem; overflow: hidden; padding: 0; border: 0; background: #0b2a4a; cursor: pointer;
-}
-.peek img { width: 100%; height: 100%; object-fit: cover; }
-.peek.left img { object-position: right; }
-.peek.right img { object-position: left; }
-@media (min-width: 640px) { .peek { display: block; } }
-@media (min-width: 768px) {
-  .peek { width: 20vw; height: min(26rem, 42vw); }
-  .carousel-track { gap: 1.25rem; }
-}
-.slide {
-  position: relative; z-index: 2; width: min(100%, 52rem); flex-shrink: 0;
+.carousel-strip .card-slide {
+  position: relative; flex: 0 0 auto; width: min(62vw, 720px);
   border-radius: 1rem; overflow: hidden; background: #0b2a4a;
+  transform-origin: center;
 }
-.slide img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
-.slide .veil {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.12) 48%, transparent);
-  pointer-events: none;
+.carousel-strip .card-slide img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+.carousel-strip .card-slide .veil {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.08) 36%, transparent 58%);
 }
-.slide .cap {
-  position: absolute; left: 0; right: 0; bottom: 0; padding: 0 1.5rem 4rem; text-align: center; color: #fff;
+.carousel-strip .card-slide .cap {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 0 1.25rem 3.5rem; text-align: center; color: #fff;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .45s cubic-bezier(0.22,1,0.36,1), transform .45s cubic-bezier(0.22,1,0.36,1);
 }
-.slide .cap .cat { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; opacity: .85; }
-.slide .cap h3 { margin-top: .5rem; font-size: clamp(1.6rem, 3vw, 2.4rem); color: #fff; }
+.carousel-strip .card-slide.is-active .cap { opacity: 1; transform: none; }
+.carousel-strip .card-slide .cap .cat { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; opacity: .75; }
+.carousel-strip .card-slide .cap h3 { margin-top: .25rem; font-size: clamp(1rem, 1.6vw, 1.25rem); color: #fff; font-weight: 500; }
 .carousel-nav {
   position: absolute; left: 50%; bottom: 1rem; transform: translateX(-50%);
   display: flex; gap: .5rem; z-index: 3;
