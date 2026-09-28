@@ -102,12 +102,28 @@ header.solid .menu-btn { color: var(--fg); }
   margin-top: auto; padding: 0 1.25rem 5rem;
   font-family: var(--display); font-size: clamp(1.55rem, 4.6vw, 3.4rem);
   letter-spacing: .08em; white-space: nowrap; font-weight: 500; color: #fff;
-  background-image: linear-gradient(105deg, #fff 0%, #fff 40%, #fff 46%, #d9d9d9 50%, #fff 54%, #fff 100%);
-  background-size: 220% 100%;
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-  animation: text-shimmer 3.4s ease-in-out infinite;
 }
-.slogan::after { content: none; display: none; }
+.slogan-clip { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .06em; }
+.slogan-word, .slogan-sep { display: inline-block; }
+.slogan-sep { opacity: .55; padding: 0 .12em; }
+.slogan-in-1 { animation: slogan-rise-1 7.2s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
+.slogan-in-2 { animation: slogan-rise-2 7.2s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
+.slogan-in-3 { animation: slogan-rise-3 7.2s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
+@keyframes slogan-rise-1 {
+  0%, 3% { opacity: 0; transform: translate3d(0, 110%, 0); filter: blur(8px); }
+  12%, 78% { opacity: 1; transform: none; filter: none; }
+  88%, 100% { opacity: 0; transform: translate3d(0, -30%, 0); filter: blur(6px); }
+}
+@keyframes slogan-rise-2 {
+  0%, 16% { opacity: 0; transform: translate3d(0, 110%, 0); filter: blur(8px); }
+  26%, 78% { opacity: 1; transform: none; filter: none; }
+  88%, 100% { opacity: 0; transform: translate3d(0, -30%, 0); filter: blur(6px); }
+}
+@keyframes slogan-rise-3 {
+  0%, 30% { opacity: 0; transform: translate3d(0, 110%, 0); filter: blur(8px); }
+  40%, 78% { opacity: 1; transform: none; filter: none; }
+  88%, 100% { opacity: 0; transform: translate3d(0, -30%, 0); filter: blur(6px); }
+}
 @media (min-width: 768px) {
   .sys-label { padding-top: 8rem; }
   .slogan { padding: 0 2rem 4.5rem; }
