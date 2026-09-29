@@ -51,8 +51,10 @@ header.solid {
 .logo-dark { display: none; }
 header.solid .logo-light { display: none; }
 header.solid .logo-dark { display: block; }
-footer .logo-light { display: none; }
-footer .logo-dark { display: block; }
+footer .logo-light { display: block; filter: none; }
+footer .logo-dark { display: none; }
+header.solid .logo-light { display: none; }
+header.solid .logo-dark { display: block; }
 .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 4rem; }
 @media (min-width: 768px) { .bar { height: 5rem; } }
 .logo { height: 2.25rem; width: auto; }
@@ -102,27 +104,52 @@ header.solid .menu-btn { color: var(--fg); }
   margin-top: auto; padding: 0 1.25rem 5rem;
   font-family: var(--display); font-size: clamp(1.55rem, 4.6vw, 3.4rem);
   letter-spacing: .08em; white-space: nowrap; font-weight: 500; color: #fff;
+  position: relative; isolation: isolate; display: block;
 }
-.slogan-clip { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .06em; }
-.slogan-word, .slogan-sep { display: inline-block; }
-.slogan-sep { opacity: .55; padding: 0 .12em; }
+.slogan::before {
+  content: ""; position: absolute; left: 4%; right: 4%; bottom: -18%; height: 80%;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,.38), transparent 68%);
+  filter: blur(18px); pointer-events: none; z-index: 0;
+  animation: halo-pulse 7.2s ease-in-out infinite;
+}
+.slogan::after {
+  content: ""; position: absolute; inset: -8% -6%;
+  background: linear-gradient(108deg, transparent 0%, transparent 38%, rgba(255,255,255,0) 42%, rgba(255,255,255,.95) 50%, rgba(255,255,255,0) 58%, transparent 100%);
+  background-size: 220% 100%; background-position: 130% 0;
+  mix-blend-mode: overlay; pointer-events: none; z-index: 2;
+  animation: light-sweep 7.2s ease-in-out infinite;
+}
+.slogan-clip { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .06em; position: relative; z-index: 1; }
+.slogan-word, .slogan-sep { display: inline-block; position: relative; z-index: 1; }
+.slogan-sep { opacity: .85; padding: 0 .12em; }
 .slogan-in-1 { animation: slogan-rise-1 7.2s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
 .slogan-in-2 { animation: slogan-rise-2 7.2s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
 .slogan-in-3 { animation: slogan-rise-3 7.2s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
 @keyframes slogan-rise-1 {
-  0%, 3% { opacity: 0; transform: translate3d(0, 110%, 0); filter: blur(8px); }
-  12%, 78% { opacity: 1; transform: none; filter: none; }
-  88%, 100% { opacity: 0; transform: translate3d(0, -30%, 0); filter: blur(6px); }
+  0%, 3% { opacity: 0; transform: translate3d(0, 110%, 0); filter: blur(8px); text-shadow: none; }
+  12%, 78% { opacity: 1; transform: none; filter: none; text-shadow: 0 0 18px rgba(255,255,255,.7), 0 0 42px rgba(255,255,255,.35); }
+  88%, 100% { opacity: 0; transform: translate3d(0, -30%, 0); filter: blur(6px); text-shadow: none; }
 }
 @keyframes slogan-rise-2 {
-  0%, 16% { opacity: 0; transform: translate3d(0, 110%, 0); filter: blur(8px); }
-  26%, 78% { opacity: 1; transform: none; filter: none; }
-  88%, 100% { opacity: 0; transform: translate3d(0, -30%, 0); filter: blur(6px); }
+  0%, 16% { opacity: 0; transform: translate3d(0, 110%, 0); filter: blur(8px); text-shadow: none; }
+  26%, 78% { opacity: 1; transform: none; filter: none; text-shadow: 0 0 18px rgba(255,255,255,.7), 0 0 42px rgba(255,255,255,.35); }
+  88%, 100% { opacity: 0; transform: translate3d(0, -30%, 0); filter: blur(6px); text-shadow: none; }
 }
 @keyframes slogan-rise-3 {
-  0%, 30% { opacity: 0; transform: translate3d(0, 110%, 0); filter: blur(8px); }
-  40%, 78% { opacity: 1; transform: none; filter: none; }
-  88%, 100% { opacity: 0; transform: translate3d(0, -30%, 0); filter: blur(6px); }
+  0%, 30% { opacity: 0; transform: translate3d(0, 110%, 0); filter: blur(8px); text-shadow: none; }
+  40%, 78% { opacity: 1; transform: none; filter: none; text-shadow: 0 0 18px rgba(255,255,255,.7), 0 0 42px rgba(255,255,255,.35); }
+  88%, 100% { opacity: 0; transform: translate3d(0, -30%, 0); filter: blur(6px); text-shadow: none; }
+}
+@keyframes halo-pulse {
+  0%, 28% { opacity: 0; transform: scale(.92); }
+  46%, 74% { opacity: 1; transform: scale(1); }
+  88%, 100% { opacity: 0; transform: scale(1.04); }
+}
+@keyframes light-sweep {
+  0%, 40% { background-position: 130% 0; opacity: 0; }
+  46% { opacity: 1; }
+  64% { background-position: -30% 0; opacity: 1; }
+  72%, 100% { background-position: -30% 0; opacity: 0; }
 }
 @media (min-width: 768px) {
   .sys-label { padding-top: 8rem; }
@@ -222,12 +249,28 @@ button[type=submit] {
   border: 0; background: var(--ink); color: #fff; min-height: 2.75rem; border-radius: 999px; font: inherit;
 }
 
-footer { border-top: 1px solid var(--line); padding: 4rem 0; }
-.foot { display: grid; gap: 2.5rem; }
+footer {
+  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 48%, #050505 100%);
+  color: #fff;
+  border-top: 1px solid rgba(255,255,255,.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14);
+  padding: 4rem 0 0;
+}
+.foot { display: grid; gap: 2.5rem; padding-bottom: 3rem; }
 @media (min-width: 768px) { .foot { grid-template-columns: 2fr 1fr 1fr; } }
-.foot a { display: block; color: var(--muted); font-size: .9rem; padding: .25rem 0; }
-.foot a:hover { color: var(--fg); }
-.tiny { margin-top: 2rem; color: var(--muted); font-size: .8rem; }
+footer .kicker, footer .kicker.light { color: #fff !important; }
+footer p, footer .lead, footer .tiny { color: rgba(255,255,255,.86) !important; }
+footer a { display: block; font-size: .9rem; padding: .25rem 0; color: rgba(255,255,255,.86) !important; }
+footer a:hover { color: #fff !important; }
+.tiny { margin: 0; padding: 1.1rem 0 1.4rem; border-top: 1px solid rgba(255,255,255,.14); font-size: .8rem; }
+
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0) scale(.985);
+  filter: blur(6px);
+  transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1), filter .7s cubic-bezier(.22,1,.36,1);
+}
+.reveal.in { opacity: 1; transform: none; filter: none; }
 
 .page { padding-top: 6.5rem; }
 @media (min-width: 768px) { .page { padding-top: 7.5rem; } }
